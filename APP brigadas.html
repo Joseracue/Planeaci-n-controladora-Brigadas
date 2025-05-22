@@ -1,0 +1,540 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Organización Planeación Controladora GER - Cursos de Brigadas y Emergencias</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <style>
+        /* Estilos CSS */
+        body {
+            font-family: 'Inter', sans-serif; /* Tipografía Inter */
+            margin: 0;
+            padding: 0;
+            background-color: #f0f0f0; /* Fondo gris claro */
+            color: #333;
+            line-height: 1.6;
+        }
+
+        header {
+            background-color: #FFFFFF; /* Blanco para el encabezado */
+            padding: 1.5em 0;
+            text-align: center;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            position: relative; /* Para posicionar el logo */
+        }
+
+        .header-content {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            width: 90%;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .logo-container {
+            margin-bottom: 1em;
+        }
+
+        .logo {
+            max-width: 200px; /* Tamaño más grande para el logo */
+            height: auto;
+            border-radius: 10px; /* Bordes redondeados para el logo */
+        }
+
+        header h1 {
+            margin: 0.5em 0 0.2em;
+            font-size: 3.5em; /* Tipografía grande y llamativa */
+            color: #006847; /* Verde bandera principal para el título */
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+            font-weight: 800; /* Más grueso */
+        }
+
+        header p {
+            font-size: 1.3em;
+            color: #555;
+            margin-top: 0;
+        }
+
+        .container {
+            width: 90%;
+            max-width: 1000px;
+            margin: 2em auto;
+            background-color: white;
+            padding: 2.5em;
+            border-radius: 12px; /* Bordes más redondeados */
+            box-shadow: 0 0 20px rgba(0,0,0,0.1);
+        }
+
+        h2 {
+            color: #006847; /* Verde bandera para los títulos de sección */
+            border-bottom: 3px solid #eee;
+            padding-bottom: 0.8em;
+            margin-top: 2em;
+            font-size: 2em;
+            font-weight: 700;
+        }
+
+        h3 {
+            color: #006847; /* Verde bandera */
+            margin-top: 1.5em;
+        }
+
+        p, ul, ol {
+            margin-bottom: 1em;
+            font-size: 1.1em;
+        }
+
+        ul {
+            list-style-type: disc;
+            margin-left: 25px;
+        }
+
+        ol {
+            list-style-type: decimal;
+            margin-left: 25px;
+        }
+
+        /* Estilos del formulario */
+        .form-group {
+            margin-bottom: 1.5em;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5em;
+            font-weight: bold;
+            color: #555;
+        }
+
+        /* Estilo para el asterisco de campo obligatorio */
+        .form-group label .required-asterisk {
+            color: #E20000; /* Rojo para el asterisco */
+            margin-left: 5px;
+        }
+
+        .form-group input[type="text"],
+        .form-group input[type="email"],
+        .form-group input[type="date"],
+        .form-group input[type="file"], /* Estilo para el input de archivo */
+        .form-group select,
+        .form-group textarea {
+            width: calc(100% - 20px); /* Ajuste para padding */
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 1em;
+            box-sizing: border-box; /* Incluye padding y border en el ancho */
+        }
+
+        .form-group textarea {
+            resize: vertical;
+            min-height: 80px;
+        }
+
+        .button-group {
+            display: flex;
+            gap: 15px;
+            margin-top: 2em;
+            flex-wrap: wrap; /* Permite que los botones se envuelvan en pantallas pequeñas */
+        }
+
+        .btn {
+            background-color: #006847; /* Verde bandera para botones */
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            cursor: pointer;
+            border-radius: 8px;
+            font-size: 1.1em;
+            font-weight: bold;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+        }
+
+        .btn:hover {
+            background-color: #004F36; /* Verde más oscuro al pasar el ratón */
+            transform: translateY(-2px);
+        }
+
+        .btn:active {
+            transform: translateY(0);
+            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+        }
+
+        .message {
+            margin-top: 1.5em;
+            padding: 15px;
+            border-radius: 8px;
+            font-weight: bold;
+            text-align: center;
+            display: none; /* Oculto por defecto */
+        }
+
+        .message.success {
+            background-color: #e6ffe6; /* Verde claro para éxito */
+            color: #006847; /* Verde bandera para texto de éxito */
+            border: 1px solid #a3e6a3; /* Borde verde claro */
+        }
+
+        /* Footer y redes sociales */
+        footer {
+            text-align: center;
+            padding: 2em 0;
+            background-color: #333; /* Fondo oscuro para el footer */
+            color: white;
+            margin-top: 3em;
+        }
+
+        .social-links a {
+            color: white;
+            font-size: 2.5em; /* Iconos grandes */
+            margin: 0 15px;
+            transition: color 0.3s ease;
+        }
+
+        .social-links a:hover {
+            color: #006847; /* Verde bandera al pasar el ratón */
+        }
+
+        .whatsapp-button {
+            display: inline-block;
+            background-color: #25D366; /* Verde WhatsApp */
+            color: white;
+            padding: 12px 25px;
+            border-radius: 50px; /* Botón redondeado */
+            text-decoration: none;
+            font-size: 1.2em;
+            font-weight: bold;
+            margin-top: 1.5em;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+        }
+
+        .whatsapp-button:hover {
+            background-color: #1DA851;
+            transform: translateY(-2px);
+        }
+
+        .whatsapp-button i {
+            margin-right: 10px;
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            header h1 {
+                font-size: 2.5em;
+            }
+            header p {
+                font-size: 1em;
+            }
+            h2 {
+                font-size: 1.8em;
+            }
+            .container {
+                padding: 1.5em;
+                margin: 1em auto;
+            }
+            .btn {
+                width: 100%; /* Botones ocupan todo el ancho en móviles */
+                margin-bottom: 10px;
+            }
+            .button-group {
+                flex-direction: column;
+                gap: 10px;
+            }
+            .social-links a {
+                font-size: 2em;
+                margin: 0 10px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            header h1 {
+                font-size: 2em;
+            }
+            .logo {
+                max-width: 150px;
+            }
+            .social-links a {
+                font-size: 1.8em;
+                margin: 0 8px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="header-content">
+            <div class="logo-container">
+                <img src="https://placehold.co/200x200/006847/FFFFFF?text=Planeacion+Controladora+GER+LOGO" alt="Logo de Planeación Controladora GER" class="logo">
+            </div>
+            <h1>Organización Planeación Controladora GER</h1>
+            <p>Líderes en Capacitación de Brigadas de Emergencia y Primeros Auxilios</p>
+        </div>
+    </header>
+
+    <div class="container">
+        <h2>Datos Institucionales: Organización Planeación Controladora GER</h2>
+        <p>En <strong>Organización Planeación Controladora GER</strong>, nos dedicamos a la formación integral de individuos y equipos en áreas críticas de seguridad y respuesta a emergencias. Con años de experiencia y un equipo de instructores altamente calificados, nuestro compromiso es dotar a nuestros participantes con las habilidades y conocimientos necesarios para proteger vidas y bienes en cualquier situación.</p>
+        <p>Nuestra metodología combina teoría y práctica intensiva, asegurando que cada brigadista esté preparado para enfrentar desafíos reales con confianza y eficacia.</p>
+
+        <h2>Misión</h2>
+        <p>Capacitar y empoderar a la sociedad y a las organizaciones con conocimientos y habilidades esenciales en gestión de riesgos, primeros auxilios, combate de incendios y respuesta a emergencias, fomentando una cultura de prevención y autoprotección.</p>
+
+        <h2>Visión</h2>
+        <p>Ser la institución líder a nivel nacional en capacitación de seguridad y emergencias, reconocida por la excelencia de nuestros programas, la innovación en nuestras metodologías y el impacto positivo en la resiliencia de las comunidades que servimos.</p>
+
+        <h2>Valores</h2>
+        <ul>
+            <li><strong>Compromiso:</strong> Dedicación inquebrantable a la seguridad y bienestar de las personas.</li>
+            <li><strong>Excelencia:</strong> Búsqueda constante de la más alta calidad en nuestros programas y servicios.</li>
+            <li><strong>Integridad:</b> Actuar con honestidad, ética y responsabilidad en todas nuestras acciones.</li>
+            <li><strong>Solidaridad:</strong> Fomentar el apoyo mutuo y la colaboración en situaciones de emergencia.</li>
+            <li><strong>Innovación:</strong> Adaptación y mejora continua de nuestras técnicas y herramientas de capacitación.</li>
+        </ul>
+
+        <h2>Objetivo de Nuestros Cursos de Brigadas</h2>
+        <p>Proporcionar a los participantes las competencias necesarias para conformar y operar brigadas de emergencia eficaces, capaces de prevenir, mitigar y responder ante diversas situaciones de riesgo, garantizando la seguridad de las personas y la continuidad de las operaciones.</p>
+        <ol>
+            <li>Desarrollar habilidades en primeros auxilios avanzados y soporte vital básico.</li>
+            <li>Dominar técnicas de evacuación y rescate en diferentes escenarios.</li>
+            <li>Adquirir conocimientos y práctica en el uso de equipos contra incendios.</li>
+            <li>Fomentar el liderazgo, la comunicación efectiva y el trabajo en equipo bajo presión.</li>
+            <li>Establecer planes de emergencia y protocolos de actuación ante desastres.</li>
+        </ol>
+
+        <hr>
+
+        <h2>Formulario de Inscripción al Curso</h2>
+        <form id="inscripcionForm">
+            <div class="form-group">
+                <label for="nombre">Nombre Completo:<span class="required-asterisk">*</span></label>
+                <input type="text" id="nombre" name="nombre" required>
+            </div>
+
+            <div class="form-group">
+                <label for="fechaNacimiento">Fecha de Nacimiento:<span class="required-asterisk">*</span></label>
+                <input type="date" id="fechaNacimiento" name="fechaNacimiento" required>
+            </div>
+
+            <div class="form-group">
+                <label for="curso">Selecciona el curso al que te inscribes:<span class="required-asterisk">*</span></label>
+                <select id="curso" name="curso" required>
+                    <option value="">-- Selecciona un curso --</option>
+                    <option value="Brigada de Emergencias">Brigada de Emergencias</option>
+                    <option value="Primeros Auxilios">Primeros Auxilios</option>
+                    <option value="Combate Contra Incendios">Combate Contra Incendios</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="modalidad">Modalidad del curso:<span class="required-asterisk">*</span></label>
+                <select id="modalidad" name="modalidad" required>
+                    <option value="">-- Selecciona modalidad --</option>
+                    <option value="Presencial">Presencial</option>
+                    <option value="Virtual">Virtual</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="telefono">Teléfono (10 dígitos):<span class="required-asterisk">*</span></label>
+                <input type="text" id="telefono" name="telefono" maxlength="10" pattern="[0-9]{10}" title="Por favor, ingresa 10 dígitos numéricos" required>
+            </div>
+
+            <div class="form-group">
+                <label for="email">E-mail:<span class="required-asterisk">*</span></label>
+                <input type="email" id="email" name="email" required>
+            </div>
+
+            <div class="form-group">
+                <label for="ciudad">Ciudad:<span class="required-asterisk">*</span></label>
+                <input type="text" id="ciudad" name="ciudad" required>
+            </div>
+
+            <div class="form-group">
+                <label for="estado">Estado:<span class="required-asterisk">*</span></label>
+                <select id="estado" name="estado" required>
+                    <option value="">-- Selecciona un estado --</option>
+                    <option value="Aguascalientes">Aguascalientes</option>
+                    <option value="Baja California">Baja California</option>
+                    <option value="Baja California Sur">Baja California Sur</option>
+                    <option value="Campeche">Campeche</option>
+                    <option value="Chiapas">Chiapas</option>
+                    <option value="Chihuahua">Chihuahua</option>
+                    <option value="Coahuila">Coahuila</option>
+                    <option value="Colima">Colima</option>
+                    <option value="Ciudad de México">Ciudad de México</option>
+                    <option value="Durango">Durango</option>
+                    <option value="Guanajuato">Guanajuato</option>
+                    <option value="Guerrero">Guerrero</option>
+                    <option value="Hidalgo">Hidalgo</option>
+                    <option value="Jalisco">Jalisco</option>
+                    <option value="México">México</option>
+                    <option value="Michoacán">Michoacán</option>
+                    <option value="Morelos">Morelos</option>
+                    <option value="Nayarit">Nayarit</option>
+                    <option value="Nuevo León">Nuevo León</option>
+                    <option value="Oaxaca">Oaxaca</option>
+                    <option value="Puebla">Puebla</option>
+                    <option value="Querétaro">Querétaro</option>
+                    <option value="Quintana Roo">Quintana Roo</option>
+                    <option value="San Luis Potosí">San Luis Potosí</option>
+                    <option value="Sinaloa">Sinaloa</option>
+                    <option value="Sonora">Sonora</option>
+                    <option value="Tabasco">Tabasco</option>
+                    <option value="Tamaulipas">Tamaulipas</option>
+                    <option value="Tlaxcala">Tlaxcala</option>
+                    <option value="Veracruz">Veracruz</option>
+                    <option value="Yucatán">Yucatán</option>
+                    <option value="Zacatecas">Zacatecas</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="cvFile">Adjuntar Curriculum Vitae (PDF, DOCX):<span class="required-asterisk">*</span></label>
+                <input type="file" id="cvFile" name="cvFile" accept=".pdf,.doc,.docx" required>
+            </div>
+
+            <div class="form-group">
+                <label for="comentarios">Comentarios:<span class="required-asterisk">*</span></label>
+                <textarea id="comentarios" name="comentarios" required></textarea>
+            </div>
+
+            <div class="button-group">
+                <button type="submit" class="btn" id="generarInscripcion">Generar Inscripción</button>
+                <button type="button" class="btn" id="exportarRecibo">Exportar Recibo (PDF)</button>
+            </div>
+
+            <div id="message" class="message"></div>
+        </form>
+    </div>
+
+    <footer>
+        <div class="social-links">
+            <a href="#" target="_blank" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+            <a href="#" target="_blank" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+            <a href="#" target="_blank" aria-label="TikTok"><i class="fab fa-tiktok"></i></a>
+            <a href="#" target="_blank" aria-label="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
+        </div>
+        <a href="https://wa.me/5212221234567" target="_blank" class="whatsapp-button">
+            <i class="fab fa-whatsapp"></i> Contacto WhatsApp
+        </a>
+        <p>&copy; 2025 Organización Planeación Controladora GER. Todos los derechos reservados.</p>
+    </footer>
+
+    <script>
+        // JavaScript para la funcionalidad del formulario y PDF
+        window.onload = function() {
+            // Obtener el formulario y los botones
+            const inscripcionForm = document.getElementById('inscripcionForm');
+            const generarInscripcionBtn = document.getElementById('generarInscripcion');
+            const exportarReciboBtn = document.getElementById('exportarRecibo');
+            const messageDiv = document.getElementById('message');
+
+            // Evento para el botón "Generar Inscripción"
+            generarInscripcionBtn.addEventListener('click', function(event) {
+                event.preventDefault(); // Evita el envío tradicional del formulario
+
+                if (inscripcionForm.checkValidity()) {
+                    // Mostrar mensaje de éxito
+                    messageDiv.textContent = '¡Te has inscrito correctamente!';
+                    messageDiv.classList.add('success');
+                    messageDiv.style.display = 'block';
+
+                    // Limpiar el formulario después de un breve retraso
+                    setTimeout(() => {
+                        inscripcionForm.reset();
+                        messageDiv.style.display = 'none'; // Ocultar mensaje
+                        messageDiv.classList.remove('success');
+                    }, 3000); // Oculta el mensaje y limpia después de 3 segundos
+                } else {
+                    // Si el formulario no es válido, el navegador mostrará los mensajes de error por defecto
+                    // También puedes agregar tu propia lógica de validación aquí si es necesario
+                    messageDiv.textContent = 'Por favor, completa todos los campos requeridos correctamente.';
+                    messageDiv.classList.remove('success');
+                    messageDiv.style.backgroundColor = '#f8d7da'; /* Color de fondo para error */
+                    messageDiv.style.color = '#721c24'; /* Color de texto para error */
+                    messageDiv.style.border = '1px solid #f5c6cb'; /* Borde para error */
+                    messageDiv.style.display = 'block';
+                }
+            });
+
+            // Evento para el botón "Exportar Recibo (PDF)"
+            exportarReciboBtn.addEventListener('click', function() {
+                // Solo generar PDF si el formulario es válido
+                if (!inscripcionForm.checkValidity()) {
+                    messageDiv.textContent = 'Por favor, completa el formulario antes de generar el recibo.';
+                    messageDiv.classList.remove('success');
+                    messageDiv.style.backgroundColor = '#f8d7da'; /* Color de fondo para error */
+                    messageDiv.style.color = '#721c24'; /* Color de texto para error */
+                    messageDiv.style.border = '1px solid #f5c6cb'; /* Borde para error */
+                    messageDiv.style.display = 'block';
+                    return; // Detener la ejecución si el formulario no es válido
+                }
+
+                // Obtener los valores del formulario
+                const nombre = document.getElementById('nombre').value;
+                const fechaNacimiento = document.getElementById('fechaNacimiento').value;
+                const curso = document.getElementById('curso').value;
+                const modalidad = document.getElementById('modalidad').value;
+                const telefono = document.getElementById('telefono').value;
+                const email = document.getElementById('email').value;
+                const ciudad = document.getElementById('ciudad').value;
+                const estado = document.getElementById('estado').value;
+                const cvFile = document.getElementById('cvFile').files[0]; // Obtener el archivo CV
+                const comentarios = document.getElementById('comentarios').value;
+
+                // Crear un nuevo documento PDF
+                const { jsPDF } = window.jspdf;
+                const doc = new jsPDF();
+
+                // Título del recibo
+                doc.setFontSize(22);
+                doc.setTextColor(0, 104, 71); // RGB para #006847 (Verde bandera)
+                doc.text('Recibo de Inscripción - Planeación Controladora GER', 105, 20, null, null, 'center');
+
+                doc.setFontSize(12);
+                doc.setTextColor(51, 51, 51); // Gris oscuro
+
+                let y = 40; // Posición inicial Y
+
+                // Función para agregar línea de texto
+                const addTextLine = (label, value) => {
+                    doc.text(`${label}: ${value}`, 20, y);
+                    y += 10;
+                };
+
+                addTextLine('Nombre Completo', nombre);
+                addTextLine('Fecha de Nacimiento', fechaNacimiento);
+                addTextLine('Curso Inscrito', curso);
+                addTextLine('Modalidad', modalidad);
+                addTextLine('Teléfono', telefono);
+                addTextLine('E-mail', email);
+                addTextLine('Ciudad', ciudad);
+                addTextLine('Estado', estado);
+                // Mostrar el nombre del archivo CV si se adjuntó
+                if (cvFile) {
+                    addTextLine('CV Adjunto', cvFile.name);
+                } else {
+                    addTextLine('CV Adjunto', 'No se adjuntó');
+                }
+                if (comentarios) {
+                    addTextLine('Comentarios', comentarios);
+                }
+
+                // Fecha de generación del recibo
+                doc.setFontSize(10);
+                doc.setTextColor(100, 100, 100); // Gris claro
+                doc.text(`Fecha de Generación: ${new Date().toLocaleDateString()}`, 20, y + 10);
+
+                // Guardar el PDF
+                doc.save(`Recibo_Inscripcion_${nombre.replace(/\s/g, '_')}.pdf`);
+            });
+        };
+    </script>
+</body>
+</html>
